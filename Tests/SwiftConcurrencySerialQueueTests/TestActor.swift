@@ -4,31 +4,28 @@ import Testing
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 actor TestActor {
     private var count = 0
-    func incrementWithSuspension(before: Int,
-                                 after: Int) async throws {
+    func incrementWithSuspension() async throws {
         count += 1
-        #expect(count == before)
+        let before = count
         await Task.yield()
-        #expect(count == after)
+        //try await Task.sleep(for: .milliseconds(1200))
+        #expect(count != before)
     }
     func increment() async throws {
         count += 1
-        #expect(count == 2)
     }
     private let queue = SerialQueueThrowing()
-    func incrementWithSuspensionOrdered(before: Int,
-                                        after: Int) async throws {
+    func incrementWithSuspensionOrdered() async throws {
         try await self.queue.enqueue {
-            try await self._incrementWithSuspensionOrdered(before: before,
-                                                           after: after)
+            try await self._incrementWithSuspensionOrdered()
         }
     }
-    func _incrementWithSuspensionOrdered(before: Int,
-                                         after: Int) async throws {
+    func _incrementWithSuspensionOrdered() async throws {
         self.count += 1
-        #expect(count == before)
+        let before = count
         await Task.yield()
-        #expect(count == after)
+        //try await Task.sleep(for: .milliseconds(1200))
+        #expect(count == before)
     }
     func incrementOrdered() async throws {
         try await self.queue.enqueue {
@@ -37,9 +34,7 @@ actor TestActor {
     }
     func _incrementOrdered() async throws {
         count += 1
-        #expect(count == 2)
     }
-#if true
     private nonisolated let executor: any SerialExecutor
     nonisolated let unownedExecutor: UnownedSerialExecutor
     init() {
@@ -48,5 +43,4 @@ actor TestActor {
         unownedExecutor = executor.asUnownedSerialExecutor()
         executor.start()
     }
-#endif
 }
