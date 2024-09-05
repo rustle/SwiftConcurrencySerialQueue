@@ -20,9 +20,6 @@ public final class SerialQueue: Sendable {
     deinit {
         task.cancel()
     }
-    public func enqueue(_ work: @escaping WorkItem<Void>) {
-        continuation.yield(work)
-    }
     public func enqueue<Result>(_ work: @escaping WorkItem<Result>) async -> Result {
         await withCheckedContinuation { resultContinuation in
             continuation.yield {

@@ -20,9 +20,6 @@ public final class SerialQueueThrowing: Sendable {
     deinit {
         task.cancel()
     }
-    public func enqueue(_ work: @escaping WorkItem<Void>) {
-        continuation.yield(work)
-    }
     public func enqueue<Result>(_ work: @escaping WorkItem<Result>) async throws -> Result {
         try await withCheckedThrowingContinuation { resultContinuation in
             continuation.yield {
