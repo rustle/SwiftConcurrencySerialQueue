@@ -1,7 +1,7 @@
 import Testing
 @testable import SwiftConcurrencySerialQueue
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@available(macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 @Test func withoutQueue() async throws {
     // This flakes on run repeatedly
     // Changing Task.yield in TestActor to Task.sleep makes it flake *less*
@@ -17,7 +17,7 @@ import Testing
     }
 }
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@available(macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 @Test func withQueue() async throws {
     let actor = TestActor()
     try await withThrowingTaskGroup(of: Void.self) { group in
@@ -31,7 +31,7 @@ import Testing
     }
 }
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@available(macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 @Test func withoutQueue_Throwing() async throws {
     // This flakes on run repeatedly
     // Changing Task.yield in TestActor to Task.sleep makes it flake *less*
@@ -47,7 +47,7 @@ import Testing
     }
 }
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@available(macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 @Test func withQueue_Throwing() async throws {
     let actor = TestActor()
     try await withThrowingTaskGroup(of: Void.self) { group in

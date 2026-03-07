@@ -1,7 +1,7 @@
 import Testing
 @testable import SwiftConcurrencySerialQueue
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@available(macOS 15.0, iOS 18.0, watchOS 10.0, tvOS 18.0, *)
 actor TestActor {
     private var count = 0
     private let queueThrowing = SerialQueueThrowing()
@@ -30,7 +30,7 @@ actor TestActor {
     }
 
     func incrementWithSuspension_Ordered_Throwing() async throws {
-        try await self.queueThrowing.enqueue {
+        try await self.queueThrowing.enqueue { _ in
             try await self._incrementWithSuspension_Ordered_Throwing()
         }
     }
@@ -41,13 +41,13 @@ actor TestActor {
         #expect(count == before)
     }
     func increment_Ordered_Throwing() async throws {
-        try await self.queueThrowing.enqueue {
+        try await self.queueThrowing.enqueue { _ in
             await self._increment_Ordered()
         }
     }
 
     func incrementWithSuspension_Ordered() async -> Bool {
-        await self.queue.enqueue {
+        await self.queue.enqueue { _ in
             await self._incrementWithSuspension_Ordered()
         }
     }
@@ -58,7 +58,7 @@ actor TestActor {
         return count == before
     }
     func increment_Ordered() async {
-        await self.queue.enqueue {
+        await self.queue.enqueue { _ in
             await self._increment_Ordered()
         }
     }
@@ -68,9 +68,6 @@ actor TestActor {
     
     private func suspension() async {
         await Task.yield()
-        //do {
-        //    try await Task.sleep(for: .milliseconds(1200))
-        //} catch {}
     }
 
     init() {
